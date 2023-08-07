@@ -26,8 +26,8 @@ public class SimpleFactorAuthorizationApplication {
         return args -> {
             if (repository.findByAuthority("ADMIN").isPresent()) return;
             try {
-                Role adminRole = repository.save(new Role("ADMIN"));
-                repository.save(new Role("USER"));
+                Role adminRole = repository.save(new Role("ROLE_ADMIN"));
+                repository.save(new Role("ROLE_USER"));
                 Set<Role> roles = new HashSet<>();
                 roles.add(adminRole);
 

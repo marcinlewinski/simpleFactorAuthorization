@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 
 @Configuration
@@ -38,11 +39,11 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize -> {
-                    authorize.requestMatchers("/").permitAll();
-                    authorize.requestMatchers("/admin/**").hasAuthority("ADMIN");
-                    authorize.requestMatchers("/user/**").hasAnyAuthority("ADMIN", "USER");
+                    authorize.requestMatchers(new AntPathRequestMatcher("/")).permitAll();
+                    authorize.requestMatchers(new AntPathRequestMatcher("/admin/**")).hasAuthority("ROLE_ADMIN");
+                    authorize.requestMatchers(new AntPathRequestMatcher("/user/**")).hasAnyAuthority("ROLE_ADMIN", "ROLE_USER");
                     authorize.anyRequest().authenticated();
                 }).formLogin(Customizer.withDefaults()).httpBasic(Customizer.withDefaults())
-                .build();
+                .getOrBuild();
     }
 }
