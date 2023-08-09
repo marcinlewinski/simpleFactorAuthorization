@@ -40,6 +40,7 @@ public class SecurityConfiguration {
                 .headers(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize -> {
                     authorize.requestMatchers(new AntPathRequestMatcher("/")).permitAll();
+                    authorize.requestMatchers(new AntPathRequestMatcher("/auth/**")).permitAll();
                     authorize.requestMatchers(new AntPathRequestMatcher("/admin/**")).hasAuthority("ROLE_ADMIN");
                     authorize.requestMatchers(new AntPathRequestMatcher("/user/**")).hasAnyAuthority("ROLE_ADMIN", "ROLE_USER");
                     authorize.anyRequest().authenticated();
