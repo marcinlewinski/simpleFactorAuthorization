@@ -1,5 +1,6 @@
 package com.marcinl.simpleFactorAuthorization.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -16,6 +17,12 @@ public class TokenService {
     JwtEncoder jwtEncoder;
     JwtDecoder jwtDecoder;
 
+    @Autowired
+    public TokenService(JwtEncoder jwtEncoder, JwtDecoder jwtDecoder) {
+        this.jwtEncoder = jwtEncoder;
+        this.jwtDecoder = jwtDecoder;
+    }
+
     public String generateJwt(Authentication authentication) {
         Instant now = Instant.now();
         String scope = authentication.getAuthorities().stream()
@@ -26,6 +33,7 @@ public class TokenService {
                 .issuer("self")
                 .issuedAt(now)
                 .subject(authentication.getName())
+                .claim("authorities",scope)
                 .build();
         return jwtEncoder.encode(JwtEncoderParameters.from(claimsSet)).getTokenValue();
     }

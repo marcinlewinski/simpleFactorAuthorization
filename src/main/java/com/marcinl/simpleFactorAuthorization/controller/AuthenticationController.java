@@ -1,5 +1,6 @@
 package com.marcinl.simpleFactorAuthorization.controller;
 
+import com.marcinl.simpleFactorAuthorization.model.LoginResponseDTO;
 import com.marcinl.simpleFactorAuthorization.model.RegistrationDTO;
 import com.marcinl.simpleFactorAuthorization.model.User;
 import com.marcinl.simpleFactorAuthorization.service.AuthenticationService;
@@ -21,4 +22,11 @@ public class AuthenticationController {
     public User registerUser(@RequestBody RegistrationDTO registrationDTO) {
         return authenticationService.registerUser(registrationDTO);
     }
+    @PostMapping("/login")
+    public LoginResponseDTO loginUser(@RequestBody RegistrationDTO registrationDTO) {
+
+        return authenticationService.loginUser(registrationDTO.getUsername(),registrationDTO.getPassword());
+    }
+
 }
+

@@ -24,7 +24,7 @@ public class SimpleFactorAuthorizationApplication {
     @Bean
     CommandLineRunner run(RoleRepository repository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
         return args -> {
-            if (repository.findByAuthority("ADMIN").isPresent()) return;
+            if (repository.findByAuthority("ROLE_ADMIN").isPresent()) return;
             try {
                 Role adminRole = repository.save(new Role("ROLE_ADMIN"));
                 repository.save(new Role("ROLE_USER"));

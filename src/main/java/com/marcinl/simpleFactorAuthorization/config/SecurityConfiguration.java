@@ -47,9 +47,21 @@ public class SecurityConfiguration {
     public AuthenticationManager authManager(UserDetailsService userDetailsService) {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setUserDetailsService(userDetailsService);
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         return new ProviderManager(daoAuthenticationProvider);
     }
 
+    @Bean
+    public CustomJwtGrantedAuthoritiesConverter customJwtGrantedAuthoritiesConverter() {
+        return new CustomJwtGrantedAuthoritiesConverter();
+    }
+
+    @Bean
+    public JwtAuthenticationConverter jwtAuthenticationConverter(CustomJwtGrantedAuthoritiesConverter customJwtConverter) {
+        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+        converter.setJwtGrantedAuthoritiesConverter(customJwtConverter);
+        return converter;
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -60,25 +72,18 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> {
                     authorize.requestMatchers(new AntPathRequestMatcher("/")).permitAll();
                     authorize.requestMatchers(new AntPathRequestMatcher("/auth/**")).permitAll();
-                    authorize.requestMatchers(new AntPathRequestMatcher("/admin/**")).hasAuthority("ROLE_ADMIN");
-                    authorize.requestMatchers(new AntPathRequestMatcher("/user/**")).hasAnyAuthority("ROLE_ADMIN", "ROLE_USER");
+
                     authorize.anyRequest().authenticated();
                 })
-//                .formLogin(Customizer.withDefaults())
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt
-                                .jwtAuthenticationConverter(jwtAuthenticationConverter())
+                                .jwtAuthenticationConverter(jwtAuthenticationConverter(customJwtGrantedAuthoritiesConverter()))
                         )
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .build();
     }
 
-    @Bean
-    public JwtAuthenticationConverter jwtAuthenticationConverter() {
-        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
-        return converter;
-    }
 
     @Bean
     public JwtDecoder jwtDecoder() {
