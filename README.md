@@ -10,9 +10,6 @@ The project was created for the purpose of learning Spring Security
 
 ## 🟢 Project status
 
-  
-
-This project is considered complete and stable, and all planned features have been implemented. While we will address any critical issues that arise.
 
   
 
