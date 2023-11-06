@@ -11,11 +11,17 @@ The project was created for the purpose of learning Spring Security
 ## 🟢 Project status
 
 
-  
 
 Thank you for your interest in this project. I hope that you find it useful. Please feel free to fork this repository and use it as a starting point for your own project, or to learn from the code.
 
-  
+
+## ✨ Features
+
+**Authorization:** Utilizes the specific authority stored in the JSON Web Token (JWT) to access specific resources.  
+**Authentication:** A secure login process that generates a unique JWT for each user upon logging in.  
+**Authority:** Grants limited entry to selected resources and functionalities based on allocated authorizations.  
+**Admin Authority:** Grants full access to all system resources and functions.  
+
 
 ## 🛠️ Technologies & Tools
 
